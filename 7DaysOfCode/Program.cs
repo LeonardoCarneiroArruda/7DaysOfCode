@@ -1,14 +1,11 @@
-﻿using _7DaysOfCode;
+﻿using _7DaysOfCode.Application.Interfaces;
+using _7DaysOfCode.Application.Services;
 using _7DaysOfCode.Domain.Model;
-using _7DaysOfCode.Domain.Response;
-using Flurl;
-using Flurl.Http;
-using System;
 
 
-var allPokemons = await Consts.URLPokeApi
-                  .AppendPathSegment("pokemon")
-                  .GetJsonAsync<GetAllPokemonResponse>();
+IPokemonService pokemonService = new PokemonService();
+
+var allPokemons = await pokemonService.GetAllPokemonAsync();
 
 foreach (PokemonItemModel item in allPokemons.Results)
 {
@@ -16,14 +13,19 @@ foreach (PokemonItemModel item in allPokemons.Results)
     Console.WriteLine();
 }
 
-Console.WriteLine("Insira o nome correspondente ao Pokemon que deseja ver as características: ");
+Console.WriteLine("Digite o nome de um pokemon para consulta de detalhes");
 string pokemonEscolhido = Console.ReadLine();
 
-PokemonItemModel pokemon = allPokemons.Results.FirstOrDefault(p => p.Name == pokemonEscolhido);
+while(pokemonEscolhido != "0")
+{
 
-string pokemonProperties = await Consts.URLPokeApi
-                           .AppendPathSegment($"pokemon/{pokemonEscolhido}")
-                           .GetStringAsync();
+    var pokemon = await pokemonService.GetPokemonByNameAsync(pokemonEscolhido);
 
-Console.WriteLine(pokemonProperties);
+    pokemon.MostrarCaracteristicas();
+
+    Console.WriteLine("Digite o nome de um pokemon para consulta de detalhes ou digite 0 para sair: ");
+    pokemonEscolhido = Console.ReadLine();
+}
+
+
 
