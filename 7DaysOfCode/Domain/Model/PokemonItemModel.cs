@@ -13,7 +13,7 @@ namespace _7DaysOfCode.Domain.Model
 
         public override string ToString()
         {
-            return $"Name: {this.Name} | Url: {this.Url}";
+            return $"Name: {this.Name}";
         }
     }
 

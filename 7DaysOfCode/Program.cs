@@ -4,28 +4,68 @@ using _7DaysOfCode.Domain.Model;
 
 
 IPokemonService pokemonService = new PokemonService();
+IMenuService menuService = new MenuService();
+PersonModel pessoa;
 
-var allPokemons = await pokemonService.GetAllPokemonAsync();
 
-foreach (PokemonItemModel item in allPokemons.Results)
+string Nome = menuService.GetNameUser();
+pessoa = new PersonModel(Nome);
+string optionMenu = string.Empty;
+
+do
 {
-    Console.WriteLine(item.ToString());
-    Console.WriteLine();
-}
+    optionMenu = menuService.ShowOptionMenu(pessoa.Name);
 
-Console.WriteLine("Digite o nome de um pokemon para consulta de detalhes");
-string pokemonEscolhido = Console.ReadLine();
+    switch (optionMenu)
+    {
+        case "1":
+            Console.WriteLine();
+            Console.WriteLine("Escolha uma espécie: ");
+            var allPokemons = await pokemonService.GetAllPokemonAsync();
 
-while(pokemonEscolhido != "0")
-{
+            foreach (PokemonItemModel item in allPokemons.Results)
+            {
+                Console.WriteLine(item.ToString());
+            }
 
-    var pokemon = await pokemonService.GetPokemonByNameAsync(pokemonEscolhido);
+            string pokemonEscolhido = Console.ReadLine();
+            string optionMenuPokemon = string.Empty;
+            do
+            {
 
-    pokemon.MostrarCaracteristicas();
+                optionMenuPokemon = menuService.ShowOptionsPokemon(pessoa.Name, pokemonEscolhido);
+                var pokemon = await pokemonService.GetPokemonByNameAsync(pokemonEscolhido);
 
-    Console.WriteLine("Digite o nome de um pokemon para consulta de detalhes ou digite 0 para sair: ");
-    pokemonEscolhido = Console.ReadLine();
-}
+                switch (optionMenuPokemon)
+                {
+                    case "1":
+                        pokemon.MostrarCaracteristicas();
+                        break;
+
+                    case "2":
+                        pessoa.ToAdoptPokemon(pokemon);
+                        Console.Write($"{pessoa.Name}, {pokemon.Name} ADOTADO COM SUCESSO!!!!");
+                        Console.WriteLine();
+                        optionMenuPokemon = string.Empty;
+                        break;
+
+                    case "3":
+                        optionMenuPokemon = string.Empty;
+                        break;
+                }
+
+            } while (optionMenuPokemon != string.Empty);
+
+            break;
+
+        case "2":
+            pessoa.ShowAdopted();
+            break;
+        case "3":
+            optionMenu = string.Empty;
+            break;
+    }
+} while (optionMenu != string.Empty);
 
 
 
