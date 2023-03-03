@@ -25,6 +25,17 @@ namespace _7DaysOfCode.Application.Services
             return Console.ReadLine();
         }
 
+        public string ShowOptionsInteractPokemon(string person, string pokemon)
+        {
+            Console.WriteLine();
+            Console.WriteLine($"{person} você deseja: ");
+            Console.WriteLine($"1 - Saber como está {pokemon}");
+            Console.WriteLine($"2 - Alimentar o {pokemon}");
+            Console.WriteLine($"3 - Brincar com o {pokemon}");
+            Console.WriteLine($"4 - Voltar");
+            return Console.ReadLine();
+        }
+
         public string ShowOptionsPokemon(string person, string pokemon)
         {
             Console.WriteLine();

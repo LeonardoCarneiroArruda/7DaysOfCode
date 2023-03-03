@@ -11,6 +11,7 @@ namespace _7DaysOfCode.Application.Interfaces
         string GetNameUser();
         string ShowOptionMenu(string name);
         string ShowOptionsPokemon(string person, string pokemon);
+        string ShowOptionsInteractPokemon(string person, string pokemon);
 
     }
 }
