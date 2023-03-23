@@ -8,8 +8,8 @@ namespace _7DaysOfCode.Domain.Model
 {
     public class AbilityModel
     {
-        public string Name { get; set; }
-        public string Url { get; set; }
+        public string Name { get; private set; }
+        public string Url { get; private set; }
 
     }
 }

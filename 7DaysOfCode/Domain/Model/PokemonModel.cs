@@ -21,11 +21,11 @@ namespace _7DaysOfCode.Domain.Model
             Humor = randNum.Next(1, 10);
         }
 
-        public int Id { get; set; }
-        public List<AbilitiesModel> Abilities { get; set; }
-        public string Name { get; set; }
-        public int Height { get; set; }
-        public int Weight { get; set; }
+        public int Id { get; private set; }
+        public List<AbilitiesModel> Abilities { get; private set; }
+        public string Name { get; private set; }
+        public int Height { get; private set; }
+        public int Weight { get; private set; }
         private int Hunger { get; set; }
         private int Humor { get; set; }
 

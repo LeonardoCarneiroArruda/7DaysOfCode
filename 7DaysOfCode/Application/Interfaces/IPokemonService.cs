@@ -11,6 +11,6 @@ namespace _7DaysOfCode.Application.Interfaces
     public interface IPokemonService
     {
         Task<GetAllPokemonResponse> GetAllPokemonAsync();
-        Task<PokemonModel> GetPokemonByNameAsync(string name);
+        Task<PokemonResponse> GetPokemonByNameAsync(string name);
     }
 }

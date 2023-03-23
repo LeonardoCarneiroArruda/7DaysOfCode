@@ -20,11 +20,11 @@ namespace _7DaysOfCode.Application.Services
                   .GetJsonAsync<GetAllPokemonResponse>();
         }
 
-        public async Task<PokemonModel> GetPokemonByNameAsync(string name)
+        public async Task<PokemonResponse> GetPokemonByNameAsync(string name)
         {
             return await Consts.URLPokeApi
                                .AppendPathSegment($"pokemon/{name}")
-                               .GetJsonAsync<PokemonModel>();
+                               .GetJsonAsync<PokemonResponse>();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using _7DaysOfCode.Application.Interfaces;
 using _7DaysOfCode.Application.Services;
 using _7DaysOfCode.Domain.Model;
+using AutoMapper;
 
 namespace _7DaysOfCode.Controller
 {
@@ -9,7 +10,12 @@ namespace _7DaysOfCode.Controller
         private readonly IPokemonService pokemonService = new PokemonService();
         private readonly IMenuService menuService = new MenuService();
         private PersonModel pessoa;
+        private readonly IMapper _mapper;
 
+        public TamagochiController(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
 
         public async Task PlayGame()
         {
@@ -54,7 +60,8 @@ namespace _7DaysOfCode.Controller
             {
 
                 optionMenuPokemon = menuService.ShowOptionsPokemon(pessoa.Name, pokemonEscolhido);
-                var pokemon = await pokemonService.GetPokemonByNameAsync(pokemonEscolhido);
+                var pokemonResponseApi = await pokemonService.GetPokemonByNameAsync(pokemonEscolhido);
+                PokemonModel pokemon = _mapper.Map<PokemonModel>(pokemonResponseApi);
 
                 switch (optionMenuPokemon)
                 {
