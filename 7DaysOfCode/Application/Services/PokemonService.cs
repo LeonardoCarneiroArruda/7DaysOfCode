@@ -22,9 +22,17 @@ namespace _7DaysOfCode.Application.Services
 
         public async Task<PokemonResponse> GetPokemonByNameAsync(string name)
         {
-            return await Consts.URLPokeApi
-                               .AppendPathSegment($"pokemon/{name}")
-                               .GetJsonAsync<PokemonResponse>();
+            try
+            {
+                return await Consts.URLPokeApi
+                                   .AppendPathSegment($"pokemon/{name}")
+                                   .GetJsonAsync<PokemonResponse>();
+            }
+            catch (Exception)
+            {
+                
+                return new PokemonResponse() { Success = false};
+            }
         }
     }
 }

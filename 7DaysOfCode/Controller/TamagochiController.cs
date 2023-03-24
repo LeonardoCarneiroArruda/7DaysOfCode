@@ -1,6 +1,7 @@
 ﻿using _7DaysOfCode.Application.Interfaces;
 using _7DaysOfCode.Application.Services;
 using _7DaysOfCode.Domain.Model;
+using _7DaysOfCode.Domain.Response;
 using AutoMapper;
 
 namespace _7DaysOfCode.Controller
@@ -39,28 +40,53 @@ namespace _7DaysOfCode.Controller
                     case "3":
                         optionMenu = string.Empty;
                         break;
+                    default:
+                        Console.WriteLine("Opção inválida! Tente novamente.");
+                        break;
                 }
             } while (optionMenu != string.Empty);
         }
 
         private async Task ToAdoptMenu()
         {
-            Console.WriteLine();
-            Console.WriteLine("Escolha uma espécie: ");
-            var allPokemons = await pokemonService.GetAllPokemonAsync();
-
-            foreach (PokemonItemModel item in allPokemons.Results)
-            {
-                Console.WriteLine(item.ToString());
-            }
-
-            string pokemonEscolhido = Console.ReadLine();
-            string optionMenuPokemon = string.Empty;
+            PokemonItemModel pokemonDigitado = null;
             do
             {
+                Console.WriteLine();
+                Console.WriteLine("Escolha uma espécie: ");
+                var allPokemons = await pokemonService.GetAllPokemonAsync();
 
-                optionMenuPokemon = menuService.ShowOptionsPokemon(pessoa.Name, pokemonEscolhido);
-                var pokemonResponseApi = await pokemonService.GetPokemonByNameAsync(pokemonEscolhido);
+                foreach (PokemonItemModel item in allPokemons.Results)
+                {
+                    Console.WriteLine(item.ToString());
+                }
+
+                string pokemonEscolhido = Console.ReadLine();
+
+                pokemonDigitado = allPokemons.Results.FirstOrDefault(p => p.Name == pokemonEscolhido);
+                if (pokemonDigitado == null)
+                    Console.WriteLine("Ops... O pokemon que vc digitou não existe na lista. Tente novamente.");
+
+            } while (pokemonDigitado == null);
+
+            string optionMenuPokemon = string.Empty;
+
+            do
+            {
+                PokemonResponse pokemonResponseApi = null;
+
+                do
+                {
+                    optionMenuPokemon = menuService.ShowOptionsPokemon(pessoa.Name, pokemonEscolhido);
+                    pokemonResponseApi = await pokemonService.GetPokemonByNameAsync(pokemonEscolhido);
+
+                    if (!pokemonResponseApi.Success)
+                    {
+                        Console.WriteLine("Ops... Tivemos um problema na integração com API. Tente novamente.");
+                    }
+
+                } while (!pokemonResponseApi.Success);
+
                 PokemonModel pokemon = _mapper.Map<PokemonModel>(pokemonResponseApi);
 
                 switch (optionMenuPokemon)
@@ -78,6 +104,9 @@ namespace _7DaysOfCode.Controller
 
                     case "3":
                         optionMenuPokemon = string.Empty;
+                        break;
+                    default:
+                        Console.WriteLine("Opção inválida! Tente novamente.");
                         break;
                 }
 
@@ -115,6 +144,9 @@ namespace _7DaysOfCode.Controller
 
                         case "4":
                             optionMenuInteractPokemon = string.Empty;
+                            break;
+                        default:
+                            Console.WriteLine("Opção inválida! Tente novamente.");
                             break;
                     }
 
