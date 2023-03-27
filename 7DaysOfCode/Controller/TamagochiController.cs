@@ -50,6 +50,7 @@ namespace _7DaysOfCode.Controller
         private async Task ToAdoptMenu()
         {
             PokemonItemModel pokemonDigitado = null;
+            string pokemonEscolhido = null;
             do
             {
                 Console.WriteLine();
@@ -61,7 +62,7 @@ namespace _7DaysOfCode.Controller
                     Console.WriteLine(item.ToString());
                 }
 
-                string pokemonEscolhido = Console.ReadLine();
+                pokemonEscolhido = Console.ReadLine();
 
                 pokemonDigitado = allPokemons.Results.FirstOrDefault(p => p.Name == pokemonEscolhido);
                 if (pokemonDigitado == null)
@@ -116,11 +117,20 @@ namespace _7DaysOfCode.Controller
         private void AdoptedMenu()
         {
             pessoa.ShowAdopted();
-
-            Console.WriteLine("Se quiser interajir com algum pokemon, digite o nome, ou pressione enter para seguir: ");
-            string pokemonInteract = Console.ReadLine();
+            string pokemonInteract = null;
+            PokemonModel pokemonAdopted = null;
             string optionMenuInteractPokemon = string.Empty;
-            var pokemonAdopted = pessoa.Adopted.FirstOrDefault(p => p.Name == pokemonInteract);
+
+            do
+            {
+                Console.WriteLine("Se quiser interajir com algum pokemon, digite o nome, ou pressione enter para seguir: ");
+                pokemonInteract = Console.ReadLine();
+                pokemonAdopted = pessoa.Adopted.FirstOrDefault(p => p.Name == pokemonInteract);
+                
+                if (pokemonAdopted == null)
+                    Console.WriteLine("Ops... O pokemon que vc digitou não existe na lista. Tente novamente.");
+
+            } while (pokemonAdopted == null);
 
             if (!string.IsNullOrWhiteSpace(pokemonInteract))
             {
